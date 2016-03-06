@@ -13,6 +13,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
             'title', 'slug', 'snippet', 'author'
         )
 
+    # Get a preview of the content
     def get_snippet(self, article):
         return article.body[:200]+"..."
 
@@ -47,6 +48,7 @@ class ArticlePreviewSerializer(serializers.ModelSerializer):
             'snippet'
         )
 
+    # Get a preview of the content
     def get_snippet(self, article):
         return article.body[:300]+"..."
 
@@ -58,5 +60,6 @@ class NextArticleToReadSerializer(serializers.ModelSerializer):
             'title', 'slug', 'hero_image',
         )
 
+    # Get a preview of the content
     def get_snippet(self, article):
         return article.body[:300]+"..."

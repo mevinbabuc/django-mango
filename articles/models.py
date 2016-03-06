@@ -36,7 +36,8 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         # Check if a new post is being created
         if not self.id:
-            # Do not let updates to the title change the url. URLs should be permanent
+            # Do not let updates to the title change the url.
+            # URLs should be permanent
             self.slug = slugify(self.title)
         super(Article, self).save(*args, **kwargs)
 

@@ -2,14 +2,14 @@
 <script type="text/template" class=ArticleRandomPreviewTemplate>
     <h1>Top 10 List</h1>
     <h4 class="article-published-date">
-    <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
-    <span class="text-primary"><%= article.author %></span>
-</h4>
+        <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
+        <span class="text-primary"><%= article.author %></span>
+    </h4>
     <!-- <img src="<%= article.hero_image %>" class="img-responsive center-block article-preview"> -->
     <div style="background-image:url('<%= article.hero_image %>');" class="article-header-img">
         <h1 class="article-preview-title article-title"><%= article.title %>
-    <a href="/#/<%= article.slug %>" class="btn btn-primary btn-lg" role="button">Read more &raquo;</a>
-    </h1>
+        <a href="/#/<%= article.slug %>" class="btn btn-primary btn-lg" role="button">Read more &raquo;</a>
+        </h1>
     </div>
     <p class="article-text-content">
         <%= article.snippet %>

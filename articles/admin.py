@@ -15,6 +15,9 @@ class ArticleAdmin(admin.ModelAdmin):
     )
     prepopulated_fields = {'slug': ('title',)}
 
+    # Show the slug field only on create form
+    # This is to preven, editing the slug field
+    # URL should be permanent
     def get_readonly_fields(self, request, obj=None):
         if obj:
             self.prepopulated_fields = {}

@@ -35,9 +35,10 @@ class ArticleViewSet(viewsets.ViewSet):
         Show a blog post
         """
 
-        queryset = Article.objects.all()
+        queryset = Article.objects.filter(is_published=True)
         article = get_object_or_404(queryset, slug=slug)
         serializer = ArticleDetailSerializer(article)
+
         if serializer.data:
             return Response(serializer.data)
         else:
@@ -54,7 +55,8 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         """
         Fetch a random article for preview
         """
-        article = Article.objects.all().order_by('?').first()
+        article = Article.objects.filter(is_published=True).order_by('?').first()
+
         try:
             serializer = ArticlePreviewSerializer(article)
         except:
@@ -73,19 +75,25 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         article_set = None
         NO_OF_ARTICLES = 4
 
+        # exclude the article the user is currently reading
         if current_article:
             article_set = Article.objects.exclude(slug=current_article)
 
+        # Prefer to get articles from the same category the user is currently reading
         if category:
             article_set = article_set.filter(category__slug=category)
 
+        # Check if we have a minimum of 4 articles to show based on the user
+        # else fill with other articles
         if article_set:
             if article_set.count() < NO_OF_ARTICLES:
                 article_set = article_set | Article.objects.exclude(slug=current_article)[:NO_OF_ARTICLES - article_set.count()]
         else:
             article_set = Article.objects.exclude(slug=current_article)
 
+        # Create a pagination to show 4 recommendations at a time
         pages = Paginator(article_set, 4)
+
         try:
             article_set = pages.page(page)
         except PageNotAnInteger:
