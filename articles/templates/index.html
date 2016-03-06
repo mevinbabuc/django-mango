@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
-    <title>Off Canvas Template for Bootstrap</title>
+    <title>Top 10 Blogs | Mevin Babu</title>
     <!-- Bootstrap core CSS -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -42,36 +42,67 @@
         padding: 0.4rem 1rem;
     }
 
-    .square img {
-        display: block;
-        height: 100%;
-        width: 50%;
+    .article-text-content {
+        text-align: justify;
     }
 
-    .article-published-date{
+    .article-published-date {
         color: #cecece;
+    }
+
+    .article-preview-title {
+        position: absolute;
+        bottom: 0.2em;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding: 0.2em 0.5em;
+    }
+
+    .article-title:first-letter {
+        text-transform: capitalize;
+    }
+
+    .article-header-img,
+    .article-header-img-thumbnail,
+    .article-content-img {
+        height: 280px;
+        overflow: hidden;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        margin-bottom: 1em;
+    }
+
+    .article-header-img-thumbnail {
+        max-height: 15vw;
+    }
+
+    .article-content-img {
+        width: 100%;
     }
     </style>
 </head>
 
 <body>
     <div class="container">
-
+        <div class="row">
             <!-- Side Navigation -->
             <div class="col-xs-2" id="sidebar">
                 {% include "nav.html"%}
             </div>
-
             <div class="col-xs-10">
                 <div id="ArticleViewArea"></div>
                 <!-- What to read next -->
-                {% include "read_next.html"%}
+                <div class="row">
+                    {% include "read_next.html"%}
+                </div>
             </div>
-
-        <hr>
-        <footer>
-            <p>&copy; 2015 Company, Inc.</p>
-        </footer>
+        </div>
+    </div>
+    <hr>
+    <footer>
+        <p>&copy; 2015 Company, Inc.</p>
+    </footer>
     </div>
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
@@ -79,35 +110,31 @@
     <script src="/static/js/backbone-min.js"></script>
     <!-- Post Preview -->
     <script type="text/template" class=ArticleRandomTemplate>
-        <div class="row">
-            <h1>Top 10 List</h1>
-            <h4 class="article-published-date">
-                <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
-                <span class="text-primary"><%= article.author %></span>
-            </h4>
-            <img src="<%= article.hero_image %>" class="img-responsive center-block">
-            <!--
-            <h2><%= article.title %></h2>
-            <p class="lead">
-                <%= article.snippet %>
-            </p>
-            -->
-            <dl>
-              <dt><%= article.title %></dt>
-              <dd><%= article.snippet %></dd>
-            </dl>
+        <h1>Top 10 List</h1>
+        <h4 class="article-published-date">
+            <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
+            <span class="text-primary"><%= article.author %></span>
+        </h4>
+        <!-- <img src="<%= article.hero_image %>" class="img-responsive center-block article-preview"> -->
+        <div style="background-image:url('<%= article.hero_image %>');" class="article-header-img">
+            <h1 class="article-preview-title article-title"><%= article.title %>
+            <a href="/#/<%= article.slug %>" class="btn btn-primary btn-lg" role="button">Read more &raquo;</a>
+            </h1>
         </div>
+        <p class="article-text-content">
+            <%= article.snippet %>
+        </p>
     </script>
     <!-- Underscore template to show Top 10 posts -->
     <script type="text/template" class=ArticleTopListTemplate>
         <% _.each(articles, function(article, key, list) { %>
-            <div class="row row-eq-height">
+            <div class="row-eq-height">
                 <div class="col-xs-1 col-sm-2 center-list-index">
                     <span class="list-counter-container"><%= key+1 %></span>
                 </div>
                 <div class="col-xs-11 col-sm-10">
-                    <h3><%= article.attributes.title %></h3>
-                    <p>
+                    <h3 class="article-title"><%= article.attributes.title %></h3>
+                    <p class="article-text-content">
                         <%= article.attributes.snippet %>
                     </p>
                     <p><a href="/#/<%= article.attributes.slug %>" role="button">Read more &raquo;</a></p>
@@ -117,11 +144,24 @@
     </script>
     <!-- underscore Template to view a blog post -->
     <script type="text/template" class='ArticleDetailTemplate'>
-        <h1><%= article.title %></h1>
+        <h1 class="article-title"><%= article.title %></h1>
+        <h4 class="article-published-date">
+            <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
+            <span class="text-primary"><%= article.author %></span>
+        </h4>
+        <div style="background-image:url('<%= article.hero_image %>');" class="article-header-img"></div>
         <% var body = article.body.replace(/\n/g,'<br />').replace(/\t/g,'&nbsp;&nbsp;&nbsp;'); %>
-            <p>
-                <%= body %>
-            </p>
+            <div class="row">
+                <div class="col-xs-8">
+                    <p class="article-text-content">
+                        <%= body %>
+                    </p>
+                </div>
+                <div class="col-xs-4">
+                    <!-- <div style="background-image:url('<%= article.content_image %>');" class="article-content-img"></div> -->
+                    <img src="<%= article.content_image %>" class="img-responsive center-block">
+                </div>
+            </div>
     </script>
     <script type="text/javascript">
     // Models
@@ -213,6 +253,7 @@
                 });
             }
         });
+        document.title = "Top 10 Blogs | Mevin Babu"
     });
 
     // Route to load the details page
@@ -228,6 +269,7 @@
                     model: model,
                 })
                 article_view.render()
+                document.title = model.attributes.title + " | " + model.attributes.author
             }
         })
     });

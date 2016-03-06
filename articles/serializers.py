@@ -4,7 +4,7 @@ from .models import Article
 
 class ArticleListSerializer(serializers.ModelSerializer):
 
-    author = serializers.CharField(source='author.username')
+    author = serializers.CharField(source='author.first_name')
     snippet = serializers.SerializerMethodField()
 
     class Meta:
@@ -19,7 +19,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
 class ArticleDetailSerializer(serializers.ModelSerializer):
 
-    author = serializers.CharField(source='author.username')
+    author = serializers.CharField(source='author.first_name')
 
     class Meta:
         model = Article
@@ -32,7 +32,7 @@ class ArticleDetailSerializer(serializers.ModelSerializer):
 
 class ArticlePreviewSerializer(serializers.ModelSerializer):
 
-    author = serializers.CharField(source='author.username')
+    author = serializers.CharField(source='author.first_name')
     snippet = serializers.SerializerMethodField()
 
     class Meta:

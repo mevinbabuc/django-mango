@@ -51,20 +51,22 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         serializer = ArticlePreviewSerializer(article)
         return Response(serializer.data)
 
-    def what_to_read_next(self, category, current_article):
+    def what_to_read_next(self, request):
         """
         Get related articles for the user to read,
         If nothing show him the latest.
         """
+        current_article = request.GET.get('current_article', None)
+        category = request.GET.get('category', None)
 
         article_set = None
         if category and current_article:
-            article_set = Article.objects.exclude(slug=current_article).filter(category__slug=category)[:5]
+            article_set = Article.objects.exclude(id=current_article).filter(category__id=category)
 
         if article_set.count() < 5:
             article_set = article_set | Article.objects.exclude(
                 slug=current_article
             ).exclude(id__in=article_set)[:article_set.count()]
 
-        serializer = NextArticleToReadSerializer(article_set, many=True)
+        serializer = NextArticleToReadSerializer(article_set[:4], many=True)
         return Response(serializer.data)

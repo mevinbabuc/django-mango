@@ -1,5 +1,33 @@
 <h2>What to Read Next</h2>
-<div class="col-sm-3">
-    <img src="/static/placeholder/jedi.jpg" class="img-responsive center-block">
-    <a href="#" role="button">The foo of all times... &raquo;</a>
-</div>
+<div id="what-to-read-next" class="row"></div>
+
+<script type="text/template" id="what-to-read-next-template">
+    <% _.each(models, function(model, key, list){ %>
+        <div class="col-xs-3">
+            <!-- <img src="<%= model.attributes.hero_image %> class="img-responsive center-block"> -->
+            <div style="background-image:url('<%= model.attributes.hero_image %>');" class="article-header-img-thumbnail"></div>
+            <a href="/#/<%= model.attributes.slug %>" role="button"><%= model.attributes.title %>... &raquo;</a>
+        </div>
+    <% }); %>
+</script>
+
+<script type="text/javascript">
+window.onload = function() {
+    compiled_template = _.template($('#what-to-read-next-template').html())
+
+    var recommendedArticles = new ArticleList()
+    recommendedArticles.url = '/articles/recommend/'
+    recommendedArticles.fetch({
+        data: {
+            current_article: 1,
+            category: 1
+        },
+        processData: true,
+        success: function(collection, response, options) {
+            template = compiled_template(collection)
+            $('#what-to-read-next').html(template)
+        }
+    });
+
+}
+</script>
