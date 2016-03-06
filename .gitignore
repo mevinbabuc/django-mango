@@ -74,5 +74,3 @@ target/
 # dotenv
 .env
 
-# django-mango
-static/
