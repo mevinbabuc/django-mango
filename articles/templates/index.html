@@ -79,6 +79,18 @@
 
     .article-content-img {
         width: 100%;
+        height: 100%;
+    }
+    .related-posts-discover-btn{
+        cursor: pointer;
+    }
+    .related-posts-heading{
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+        margin: auto auto 0.5em;
+    }
+    .related-posts-heading h2{
+        margin: 0.1em;
     }
     </style>
 </head>
@@ -159,7 +171,7 @@
                 </div>
                 <div class="col-xs-4">
                     <!-- <div style="background-image:url('<%= article.content_image %>');" class="article-content-img"></div> -->
-                    <img src="<%= article.content_image %>" class="img-responsive center-block">
+                    <img src="<%= article.content_image %>" class="img-responsive center-block article-content-img">
                 </div>
             </div>
     </script>
@@ -255,10 +267,20 @@
                 var blog_view = new ArticleListView({
                     model: collection.models
                 });
+            },
+            error: function(){
+                // alert("No data in the database")
             }
         });
         document.title = "Top 10 Blogs | Mevin Babu"
     });
+
+    $("a.list-group-item").on('click', function(){
+        if(Backbone.history.fragment == ''){
+            app_router.navigate('/');
+            Backbone.history.loadUrl(Backbone.history.fragment);
+        }
+    })
 
     // Route to load the details page
     var article = null
@@ -283,6 +305,7 @@
 
     // make the URLs bookmarkable
     Backbone.history.start();
+
     </script>
 </body>
 

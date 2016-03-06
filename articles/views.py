@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -23,7 +25,10 @@ class ArticleViewSet(viewsets.ViewSet):
 
         articles = Article.objects.filter(is_published=True)[:10]
         serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data)
+        if serializer.data:
+            return Response(serializer.data)
+        else:
+            return Response({}, status=404)
 
     def detail(self, request, slug=None):
         """
@@ -33,7 +38,10 @@ class ArticleViewSet(viewsets.ViewSet):
         queryset = Article.objects.all()
         article = get_object_or_404(queryset, slug=slug)
         serializer = ArticleDetailSerializer(article)
-        return Response(serializer.data)
+        if serializer.data:
+            return Response(serializer.data)
+        else:
+            return Response({}, status=404)
 
 
 class RecommendedArticleViewSet(viewsets.ViewSet):
@@ -46,10 +54,13 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         """
         Fetch a random article for preview
         """
-
-        article = Article.objects.all().order_by('?')[:1][0]
-        serializer = ArticlePreviewSerializer(article)
-        return Response(serializer.data)
+        article = Article.objects.all().order_by('?').first()
+        try:
+            serializer = ArticlePreviewSerializer(article)
+        except:
+            return Response({}, status=404)
+        else:
+            return Response(serializer.data)
 
     def what_to_read_next(self, request):
         """
@@ -58,6 +69,7 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         """
         current_article = request.GET.get('current_article', None)
         category = request.GET.get('category', None)
+        page = request.GET.get('page', None)
         article_set = None
         NO_OF_ARTICLES = 4
 
@@ -71,7 +83,21 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
             if article_set.count() < NO_OF_ARTICLES:
                 article_set = article_set | Article.objects.exclude(slug=current_article)[:NO_OF_ARTICLES - article_set.count()]
         else:
-            article_set = Article.objects.all()
+            article_set = Article.objects.exclude(slug=current_article)
 
-        serializer = NextArticleToReadSerializer(article_set.order_by('?')[:NO_OF_ARTICLES], many=True)
-        return Response(serializer.data)
+        pages = Paginator(article_set, 4)
+        try:
+            article_set = pages.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            print "not an interger"
+            article_set = pages.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            article_set = pages.page(pages.num_pages)
+
+        serializer = NextArticleToReadSerializer(article_set, many=True)
+        if serializer.data:
+            return Response(serializer.data)
+        else:
+            return Response({}, status=404)

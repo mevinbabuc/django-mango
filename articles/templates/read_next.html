@@ -1,39 +1,74 @@
-<h2>What to Read Next</h2>
-<div id="what-to-read-next" class="row"></div>
-
+<div id="what-to-read-next" class="col-xs-12"></div>
+<!-- Underscore template for recommended article -->
 <script type="text/template" id="what-to-read-next-template">
-    <% _.each(models, function(model, key, list){ %>
-        <div class="col-xs-3">
-            <!-- <img src="<%= model.attributes.hero_image %> class="img-responsive center-block"> -->
-            <div style="background-image:url('<%= model.attributes.hero_image %>');" class="article-header-img-thumbnail"></div>
-            <a href="/#/<%= model.attributes.slug %>" role="button"><%= model.attributes.title %>... &raquo;</a>
+    <div class="row related-posts-heading">
+        <div class="col-xs-10">
+            <h2>What to Read Next</h2></div>
+        <div class="col-xs-1">
+            <h2><span class="related-posts-discover-btn glyphicon glyphicon-chevron-left" data-page="previous" aria-hidden="true"></span></h2>
         </div>
-    <% }); %>
+        <div class="col-xs-1">
+            <h2><span class="related-posts-discover-btn glyphicon glyphicon-chevron-right" data-page="next" aria-hidden="true"></span></h2>
+        </div>
+    </div>
+    <div class="row">
+        <% _.each(models, function(model, key, list){ %>
+            <div class="col-xs-3">
+                <div style="background-image:url('<%= model.attributes.hero_image %>');" class="article-header-img-thumbnail"></div>
+                <a href="/#/<%= model.attributes.slug %>" role="button">
+                    <%= model.attributes.title %>... &raquo;</a>
+            </div>
+        <% }); %>
+    </div>
 </script>
-
 <script type="text/javascript">
+var CURRENT_PAGE = 1
+var MAX_ITEMS = 4
+
 function fetch_recommended_articles() {
     compiled_template = _.template($('#what-to-read-next-template').html())
-    function getUserReadingData(){
-        if (article){
+    var recommendedArticles = new ArticleList()
+    recommendedArticles.url = '/articles/recommend/'
+
+    function getUserReadingData() {
+        if (article) {
             return {
                 current_article: article.attributes.slug,
-                category: article.attributes.category_slug
+                category: article.attributes.category_slug,
+                page: CURRENT_PAGE
             }
-        }else{
-            return {}
+        } else {
+            return {
+                page: CURRENT_PAGE
+            }
         }
     }
 
-    var recommendedArticles = new ArticleList()
-    recommendedArticles.url = '/articles/recommend/'
+    function render_to_template(collection, response, options) {
+        $('#what-to-read-next').html('')
+        template = compiled_template(collection)
+        $('#what-to-read-next').append(template)
+        $('span.related-posts-discover-btn').on('click', onSlideChange)
+    }
+
+    function onSlideChange() {
+        direction = $(this).attr("data-page")
+        direction == 'next' ? ++CURRENT_PAGE : --CURRENT_PAGE
+        if (recommendedArticles.length < MAX_ITEMS || CURRENT_PAGE <= 1) {
+            CURRENT_PAGE <= 1 ? CURRENT_PAGE = 1 : CURRENT_PAGE--
+        }
+        recommendedArticles.fetch({
+            data: getUserReadingData(),
+            processData: true,
+            success: render_to_template
+        })
+        console.log(CURRENT_PAGE)
+    }
+
     recommendedArticles.fetch({
         data: getUserReadingData(),
         processData: true,
-        success: function(collection, response, options) {
-            template = compiled_template(collection)
-            $('#what-to-read-next').html(template)
-        }
+        success: render_to_template
     });
 
 }
