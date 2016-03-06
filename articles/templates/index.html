@@ -26,8 +26,12 @@
             <div class="col-xs-2" id="sidebar">
                 {% include "nav.html"%}
             </div>
+
+            <!-- Main View area -->
             <div class="col-xs-10">
+                <!-- Content is dynamically loaded here -->
                 <div id="ArticleViewArea"></div>
+
                 <!-- What to read next -->
                 <div class="row" id="what-to-read-next"></div>
             </div>
@@ -40,9 +44,13 @@
     <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/underscore-min.js"></script>
     <script src="/static/js/backbone-min.js"></script>
+
+    <!-- include the html templates required for the blog-->
     {% include "blog_templates.html"%}
     <script src="/static/js/app.js"></script>
-    {% include "read_next.html"%}
+
+    <!-- Load the template and the script to intialize recommended articles -->
+    {% include "recommend_template.html"%}
     <script src="/static/js/recommended_article.js"></script>
 </body>
 
