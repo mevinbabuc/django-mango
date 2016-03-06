@@ -12,16 +12,23 @@
 </script>
 
 <script type="text/javascript">
-window.onload = function() {
+function fetch_recommended_articles() {
     compiled_template = _.template($('#what-to-read-next-template').html())
+    function getUserReadingData(){
+        if (article){
+            return {
+                current_article: article.attributes.slug,
+                category: article.attributes.category_slug
+            }
+        }else{
+            return {}
+        }
+    }
 
     var recommendedArticles = new ArticleList()
     recommendedArticles.url = '/articles/recommend/'
     recommendedArticles.fetch({
-        data: {
-            current_article: 1,
-            category: 1
-        },
+        data: getUserReadingData(),
         processData: true,
         success: function(collection, response, options) {
             template = compiled_template(collection)
@@ -30,4 +37,6 @@ window.onload = function() {
     });
 
 }
+
+window.onload = fetch_recommended_articles
 </script>

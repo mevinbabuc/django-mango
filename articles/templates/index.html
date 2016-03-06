@@ -233,6 +233,10 @@
 
     // route to load the articleList page
     app_router.on('route:index', function() {
+        if(article){
+            article = null
+            fetch_recommended_articles()
+        }
 
         // Get the preview article
         var preview_article = new Article()
@@ -257,8 +261,9 @@
     });
 
     // Route to load the details page
+    var article = null
     app_router.on('route:viewArticle', function(slug) {
-        var article = new Article({
+        article = new Article({
             slug: slug
         })
 
@@ -270,6 +275,7 @@
                 })
                 article_view.render()
                 document.title = model.attributes.title + " | " + model.attributes.author
+                fetch_recommended_articles()
             }
         })
     });

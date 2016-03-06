@@ -58,15 +58,20 @@ class RecommendedArticleViewSet(viewsets.ViewSet):
         """
         current_article = request.GET.get('current_article', None)
         category = request.GET.get('category', None)
-
         article_set = None
-        if category and current_article:
-            article_set = Article.objects.exclude(id=current_article).filter(category__id=category)
+        NO_OF_ARTICLES = 4
 
-        if article_set.count() < 5:
-            article_set = article_set | Article.objects.exclude(
-                slug=current_article
-            ).exclude(id__in=article_set)[:article_set.count()]
+        if current_article:
+            article_set = Article.objects.exclude(slug=current_article)
 
-        serializer = NextArticleToReadSerializer(article_set[:4], many=True)
+        if category:
+            article_set = article_set.filter(category__slug=category)
+
+        if article_set:
+            if article_set.count() < NO_OF_ARTICLES:
+                article_set = article_set | Article.objects.exclude(slug=current_article)[:NO_OF_ARTICLES - article_set.count()]
+        else:
+            article_set = Article.objects.all()
+
+        serializer = NextArticleToReadSerializer(article_set.order_by('?')[:NO_OF_ARTICLES], many=True)
         return Response(serializer.data)

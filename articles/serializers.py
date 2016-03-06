@@ -20,14 +20,18 @@ class ArticleListSerializer(serializers.ModelSerializer):
 class ArticleDetailSerializer(serializers.ModelSerializer):
 
     author = serializers.CharField(source='author.first_name')
+    category_slug = serializers.SerializerMethodField()
 
     class Meta:
         model = Article
         fields = (
             'title', 'slug', 'author',
-            'published_at', 'category', 'hero_image',
+            'published_at', 'category_slug', 'hero_image',
             'content_image', 'updated_at', 'body'
         )
+
+    def get_category_slug(self, article):
+        return article.category.slug
 
 
 class ArticlePreviewSerializer(serializers.ModelSerializer):
