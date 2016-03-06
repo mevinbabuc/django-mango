@@ -1,5 +1,3 @@
-<div id="what-to-read-next" class="col-xs-12"></div>
-<!-- Underscore template for recommended article -->
 <script type="text/template" id="what-to-read-next-template">
     <div class="row related-posts-heading">
         <div class="col-xs-10">
@@ -20,58 +18,4 @@
             </div>
         <% }); %>
     </div>
-</script>
-<script type="text/javascript">
-var CURRENT_PAGE = 1
-var MAX_ITEMS = 4
-
-function fetch_recommended_articles() {
-    compiled_template = _.template($('#what-to-read-next-template').html())
-    var recommendedArticles = new ArticleList()
-    recommendedArticles.url = '/articles/recommend/'
-
-    function getUserReadingData() {
-        if (article) {
-            return {
-                current_article: article.attributes.slug,
-                category: article.attributes.category_slug,
-                page: CURRENT_PAGE
-            }
-        } else {
-            return {
-                page: CURRENT_PAGE
-            }
-        }
-    }
-
-    function render_to_template(collection, response, options) {
-        $('#what-to-read-next').html('')
-        template = compiled_template(collection)
-        $('#what-to-read-next').append(template)
-        $('span.related-posts-discover-btn').on('click', onSlideChange)
-    }
-
-    function onSlideChange() {
-        direction = $(this).attr("data-page")
-        direction == 'next' ? ++CURRENT_PAGE : --CURRENT_PAGE
-        if (recommendedArticles.length < MAX_ITEMS || CURRENT_PAGE <= 1) {
-            CURRENT_PAGE <= 1 ? CURRENT_PAGE = 1 : CURRENT_PAGE--
-        }
-        recommendedArticles.fetch({
-            data: getUserReadingData(),
-            processData: true,
-            success: render_to_template
-        })
-        console.log(CURRENT_PAGE)
-    }
-
-    recommendedArticles.fetch({
-        data: getUserReadingData(),
-        processData: true,
-        success: render_to_template
-    });
-
-}
-
-window.onload = fetch_recommended_articles
 </script>

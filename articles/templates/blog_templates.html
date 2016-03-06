@@ -1,0 +1,57 @@
+<!-- Underscore template to view the random article preview -->
+<script type="text/template" class=ArticleRandomPreviewTemplate>
+    <h1>Top 10 List</h1>
+    <h4 class="article-published-date">
+    <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
+    <span class="text-primary"><%= article.author %></span>
+</h4>
+    <!-- <img src="<%= article.hero_image %>" class="img-responsive center-block article-preview"> -->
+    <div style="background-image:url('<%= article.hero_image %>');" class="article-header-img">
+        <h1 class="article-preview-title article-title"><%= article.title %>
+    <a href="/#/<%= article.slug %>" class="btn btn-primary btn-lg" role="button">Read more &raquo;</a>
+    </h1>
+    </div>
+    <p class="article-text-content">
+        <%= article.snippet %>
+    </p>
+</script>
+
+<!-- Underscore template to show Top 10 posts -->
+<script type="text/template" class=ArticleTopListTemplate>
+    <% _.each(articles, function(article, key, list) { %>
+        <div class="row-eq-height">
+            <div class="col-xs-1 col-sm-2 center-list-index">
+                <span class="list-counter-container"><%= key+1 %></span>
+            </div>
+            <div class="col-xs-11 col-sm-10">
+                <h3 class="article-title"><%= article.attributes.title %></h3>
+                <p class="article-text-content">
+                    <%= article.attributes.snippet %>
+                </p>
+                <p><a href="/#/<%= article.attributes.slug %>" role="button">Read more &raquo;</a></p>
+            </div>
+        </div>
+        <% }); %>
+</script>
+
+<!-- underscore Template to view a blog post -->
+<script type="text/template" class='ArticleDetailTemplate'>
+    <h1 class="article-title"><%= article.title %></h1>
+    <h4 class="article-published-date">
+    <small><%= new Date(article.published_at).toString().slice(0, 15) %></small> |
+    <span class="text-primary"><%= article.author %></span>
+</h4>
+    <div style="background-image:url('<%= article.hero_image %>');" class="article-header-img"></div>
+    <% var body = article.body.replace(/\n/g,'<br />').replace(/\t/g,'&nbsp;&nbsp;&nbsp;'); %>
+        <div class="row">
+            <div class="col-xs-8">
+                <p class="article-text-content">
+                    <%= body %>
+                </p>
+            </div>
+            <div class="col-xs-4">
+                <!-- <div style="background-image:url('<%= article.content_image %>');" class="article-content-img"></div> -->
+                <img src="<%= article.content_image %>" class="img-responsive center-block article-content-img">
+            </div>
+        </div>
+</script>
