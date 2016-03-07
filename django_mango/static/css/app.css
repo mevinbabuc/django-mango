@@ -72,3 +72,9 @@
 .related-posts-heading h2{
     margin: 0.1em;
 }
+#AppLoading {
+    text-align: center;
+}
+#AppLoading img{
+    width: 100px;
+}

@@ -95,7 +95,8 @@ app_router.on('route:index', function() {
             });
         },
         error: function(){
-            alert("No data in the database")
+            $("#ArticleViewArea").html("<b>Not able to reach the server, try again later<b/>")
+            $("#AppLoading").removeClass('hidden');
         }
     });
     document.title = "Top 10 Blogs | Mevin Babu"
