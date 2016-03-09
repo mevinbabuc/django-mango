@@ -30,7 +30,7 @@ class Article(models.Model):
         verbose_name_plural = "Articles"
         ordering = ["-published_at", "-updated_at"]
 
-    def __str__(self):
+    def __unicode__(self):
         return self.title + " by " + self.author.username
 
     def save(self, *args, **kwargs):
@@ -56,5 +56,5 @@ class Category(models.Model):
         verbose_name = "Category"
         verbose_name_plural = "Categories"
 
-    def __str__(self):
+    def __unicode__(self):
         return self.title
