@@ -21,38 +21,40 @@
 
 <body>
     <div class="container">
-        <div class="row">
+        <div class="row" id="app">
             <!-- Side Navigation -->
             <div class="col-xs-2" id="sidebar">
                 {% include "nav.html"%}
             </div>
-
             <!-- Main View area -->
             <div class="col-xs-10">
                 <!-- Content is dynamically loaded here -->
-                <div id="AppLoading" class="hidden"><img src="/static/img/loading.gif"></div>
-                <div id="ArticleViewArea"></div>
-
-                <!-- What to read next -->
-                <div class="row" id="what-to-read-next"></div>
+                <router-view>
+                    <div id="AppLoading" class="hidden">
+                        <img src="/static/img/loading.gif">
+                    </div>
+                </router-view>
             </div>
         </div>
-    <hr>
-    <footer>
-        <p>&copy; 2015 Company, Inc.</p>
-    </footer>
+        <hr>
+        <footer>
+            <p>&copy; 2015 Company, Inc.</p>
+        </footer>
     </div>
-    <script src="/static/js/lib/jquery.min.js"></script>
-    <script src="/static/js/lib/underscore-min.js"></script>
-    <script src="/static/js/lib/backbone-min.js"></script>
+    <script src="/static/js/lib/vue.js"></script>
+    <script src="/static/js/lib/vue-resource.js"></script>
+    <script src="/static/js/lib/vue-router.js"></script>
 
-    <!-- include the html templates required for the blog-->
-    {% include "blog_templates.html"%}
+    <!-- Load all the components in -->
+    {% include 'components/article_list.html' %}
+    {% include 'components/article_detail.html' %}
+    {% include 'components/article_search.html' %}
+    {% include 'components/random_article_preview.html' %}
+    {% include 'components/recommended_article.html' %}
+
+    <!-- Load the view templates -->
+    {% include 'view_templates.html' %}
     <script src="/static/js/app.js"></script>
-
-    <!-- Load the template and the script to intialize recommended articles -->
-    {% include "recommend_template.html"%}
-    <script src="/static/js/recommended_article.js"></script>
 </body>
 
 </html>

@@ -72,6 +72,13 @@
 .related-posts-heading h2{
     margin: 0.1em;
 }
+.article-search-box{
+    z-index: 999;
+    position: absolute;
+    background-color: black;
+    padding: 0.2em;
+    border-radius: 0.1em;
+}
 #AppLoading {
     text-align: center;
 }

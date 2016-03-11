@@ -1,0 +1,52 @@
+<!-- template to display the top 10 posts -->
+{% verbatim %}
+<template id="article-list-template">
+    <div class="row-eq-height" v-for="article in articles">
+        <div class="col-xs-1 col-sm-2 center-list-index">
+            <span class="list-counter-container">{{ $index+1 }}</span>
+        </div>
+        <div class="col-xs-11 col-sm-10">
+            <h3 class="article-title">{{ article.title }}</h3>
+            <p class="article-text-content">
+                {{ article.snippet }}
+            </p>
+            <p><a v-link="{ path: '/' + article.slug }" role="button">Read more &raquo;</a></p>
+        </div>
+    </div>
+</template>
+{% endverbatim %}
+
+<script type="text/javascript">
+var topArticleListComponent = Vue.extend({
+    template: '#article-list-template',
+    data: function(){
+        return articleStorage.data
+    },
+    created: function() {
+        if(this.query){
+            this.query=null
+        }else{
+            this.getTopArticles()
+        }
+    },
+    methods: {
+        getTopArticles: function() {
+            this.$http.get('articles/').then(
+                function(response) {
+                    // this.$set('articles', response.data)
+                    articleStorage.store(response.data)
+                        // console.log(response.data)
+                },
+                function(response) {
+                    console.log(response)
+                });
+        }
+    },
+    // events:{
+    //     searchResults: function(data){
+    //         console.log(data, "event rigge")
+    //         this.$set('articles', response.data)
+    //     }
+    // }
+});
+</script>
