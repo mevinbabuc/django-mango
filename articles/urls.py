@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name='blog_index_page'),
 
     url(r'^articles/$', ArticleViewSet.as_view({'get': 'list'}), name="view_article_list"),
+    url(r'^articles/search/$', ArticleViewSet.as_view({'get': 'search'}), name="view_search_results"),
 
     url(r'^articles/preview/$', RecommendedArticleViewSet.as_view({'get': 'random_article_preview'}), name="view_random_article_preview"),
     url(r'^articles/recommend/$', RecommendedArticleViewSet.as_view({'get': 'what_to_read_next'}), name="view_what_to_read_next"),

@@ -44,6 +44,25 @@ class ArticleViewSet(viewsets.ViewSet):
         else:
             return Response({}, status=404)
 
+    def search(self, request):
+        """
+        Returns the top 10 search results matching,
+        the title of the blog
+        """
+        query = request.GET.get('query', None)
+        article_set = Article.objects.filter(is_published=True)
+
+        # If query is provided search for it or return everything
+        if query:
+            article_set = article_set.filter(title__icontains=query)[:10]
+
+        serializer = ArticleListSerializer(article_set, many=True)
+
+        if serializer.data:
+            return Response(serializer.data)
+        else:
+            return Response({}, status=404)
+
 
 class RecommendedArticleViewSet(viewsets.ViewSet):
     """
