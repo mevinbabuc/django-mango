@@ -1,4 +1,4 @@
-django rest framework + Backbone.js powered light weight blog
+django rest framework + Vue.js powered light weight blog
 
 Setting up
 ----------
