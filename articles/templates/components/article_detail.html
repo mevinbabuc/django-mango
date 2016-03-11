@@ -1,0 +1,58 @@
+{% verbatim %}
+<!-- Template to display the article detail -->
+<template id='article-detail-template'>
+    <h1 class="article-title">{{ article.title }}</h1>
+    <h4 class="article-published-date">
+        <small>{{ article.published_at | formatDate }}</small> |
+        <span class="text-primary">{{ article.author }}</span>
+    </h4>
+    <div v-bind:style="{ backgroundImage: 'url(' + article.hero_image + ')' }" class="article-header-img"></div>
+    <div class="row">
+        <div class="col-xs-8">
+            <p class="article-text-content">
+                {{{ article.body | fromatNewLine }}}
+            </p>
+        </div>
+        <div class="col-xs-4">
+            <!-- <div style="background-image:url('{{ article.content_image }}');" class="article-content-img"></div> -->
+            <img v-bind:src="article.content_image" class="img-responsive center-block article-content-img">
+        </div>
+    </div>
+</template>
+{% endverbatim %}
+
+<script type="text/javascript">
+var articleDetailComponent = Vue.extend({
+    template: '#article-detail-template',
+    data: function() {
+        return {
+            article: {
+
+            }
+        }
+    },
+    created: function() {
+        this.getArticle()
+    },
+    methods: {
+        getArticle: function() {
+            this.$http.get('articles/' + this.$route.params.slug + '/').then(
+                function(response) {
+                    this.$set('article', response.data)
+                        // console.log(response.data)
+                },
+                function(response) {
+                    console.log(response)
+                });
+        }
+    },
+    filters: {
+        fromatNewLine: function(body) {
+            return body ? body.replace(/\n/g, '<br />').replace(/\t/g, '&nbsp;&nbsp;&nbsp;') : ""
+        },
+        formatDate: function(date) {
+            return new Date(date).toString().slice(0, 15)
+        }
+    },
+});
+</script>

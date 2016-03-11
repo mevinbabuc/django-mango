@@ -1,0 +1,69 @@
+<!-- The next Recommended article component -->
+{% verbatim %}
+<template id="what-to-read-next-template">
+    <div class="row related-posts-heading">
+        <div class="col-xs-10">
+            <h2>What to Read Next</h2></div>
+        <div class="col-xs-1">
+            <h2><span class="related-posts-discover-btn glyphicon glyphicon-chevron-left" data-page="previous" aria-hidden="true" v-on:click="prev"></span></h2>
+        </div>
+        <div class="col-xs-1">
+            <h2><span class="related-posts-discover-btn glyphicon glyphicon-chevron-right" data-page="next" aria-hidden="true" v-on:click="next"></span></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-3" v-for="article in recommendedArticles">
+            <div v-bind:style="{ backgroundImage: 'url(' + article.hero_image + ')' }" class="article-header-img-thumbnail"></div>
+            <!-- <a v-link="{ path: '/' + article.slug }"  role="button"> -->
+            <a v-link="{ name: 'detail', replace: true, params: { slug: article.slug } }"  role="button">
+                {{article.title}} ... &raquo;
+            </a>
+        </div>
+    </div>
+</template>
+{% endverbatim %}
+
+<script type="text/javascript">
+var recommendedArticleComponent = Vue.extend({
+    template: '#what-to-read-next-template',
+    data: function() {
+        return {
+            recommendedArticles: [],
+            CURRENT_PAGE: 1,
+            MAX_ITEMS: 4,
+            url: '/articles/recommend/'
+        }
+    },
+    created: function() {
+        this.getRecommendedArticles()
+    },
+    methods: {
+        getRecommendedArticles: function(page) {
+            var URL = page ? this.url + "?page=" + page : this.url
+            // console.log(URL)
+
+            this.$http.get(URL).then(
+                function(response) {
+                    this.$set('recommendedArticles', response.data)
+                    // console.log(response)
+                },
+                function(response) {
+                    console.log(response)
+                });
+        },
+        next: function() {
+            // this.CURRENT_PAGE
+            fetch_page = this.recommendedArticles.length < this.MAX_ITEMS ? this.CURRENT_PAGE : this.CURRENT_PAGE + 1
+            // console.log(this.CURRENT_PAGE, this.recommendedArticles.length, "next page", fetch_page)
+
+            this.getRecommendedArticles(fetch_page)
+        },
+        prev: function() {
+            fetch_page = this.recommendedArticles.length < this.MAX_ITEMS ? this.CURRENT_PAGE : this.CURRENT_PAGE - 1
+            // console.log(this.CURRENT_PAGE, this.recommendedArticles.length, "prev page", fetch_page)
+
+            this.getRecommendedArticles(fetch_page)
+        }
+    }
+})
+</script>

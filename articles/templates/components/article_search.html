@@ -1,0 +1,42 @@
+<!-- The search component -->
+<template id="search-article">
+    <h3>
+        <span class="glyphicon glyphicon-search" aria-hidden="true" v-on:click="showSearch"></span>
+    </h3>
+        <div v-show="active" class="article-search-box">
+            <input v-model=query type=text placeholder="search!" />
+            <button class="glyphicon glyphicon-search" aria-hidden="true" v-on:click="search"></button>
+        </div>
+</template>
+
+<script type="text/javascript">
+var searchArticleComponent = Vue.component('search', {
+    template: "#search-article",
+    data: function() {
+        return articleStorage.data
+    },
+    methods: {
+        showSearch: function(){
+            this.active = !this.active;
+            // console.log("foo")
+        },
+        search: function() {
+            this.$http.get('articles/search/?query='+this.query).then(
+                function(response) {
+                    this.showSearch()
+                    // this.$set('articles', response.data)
+                    console.log(response.data)
+                    // this.$dispatch('searchResults', this.articles)
+                    this.$route.router.go({
+                        name: 'search'
+                    })
+                    articleStorage.store(response.data)
+                },
+                function(response) {
+                    console.log(response)
+                });
+        }
+    },
+})
+
+</script>
