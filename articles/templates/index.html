@@ -29,11 +29,10 @@
             <!-- Main View area -->
             <div class="col-xs-10">
                 <!-- Content is dynamically loaded here -->
-                <router-view>
-                    <div id="AppLoading" class="hidden">
-                        <img src="/static/img/loading.gif">
-                    </div>
-                </router-view>
+                <div id="AppLoading" class="hidden">
+                    <img src="/static/img/loading.gif">
+                </div>
+                <router-view></router-view>
             </div>
         </div>
         <hr>
@@ -41,7 +40,7 @@
             <p>&copy; 2015 Company, Inc.</p>
         </footer>
     </div>
-    <script src="/static/js/lib/vue.js"></script>
+    <script src="/static/js/lib/vue.min.js"></script>
     <script src="/static/js/lib/vue-resource.js"></script>
     <script src="/static/js/lib/vue-router.js"></script>
 
