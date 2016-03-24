@@ -133,3 +133,30 @@ $("a.list-group-item").on('click', function(){
         Backbone.history.loadUrl(Backbone.history.fragment);
     }
 })
+
+$("#search-activate").on('click', function(){
+    $('.article-search-box').toggleClass("hide")
+})
+
+
+var searchArticles = new ArticleCollection;
+searchArticles.url = 'articles/search/?query='+query
+$("#search-button").on('click', function(){
+    query = $("#search-input").val()
+
+
+
+    // Fetch the top 10 posts
+    searchArticles.fetch({
+        success: function(collection, response, options) {
+            var blog_view = new ArticleListView({
+                model: collection.models
+            });
+        },
+        error: function(){
+            $("#ArticleViewArea").html("<b>Not able to reach the server, try again later<b/>")
+            $("#AppLoading").removeClass('hidden');
+        }
+    });
+
+});

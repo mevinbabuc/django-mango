@@ -78,3 +78,27 @@
 #AppLoading img{
     width: 100px;
 }
+.article-search-box{
+    z-index: 999;
+    position: absolute;
+    background-color: black;
+    padding: 0.4em;
+    border-radius: 0.5em;
+    display: inline-flex;
+}
+.article-search-box button{
+    top: 0px;
+}
+.article-search-box button{
+    border: none;
+}
+.article-search-box input{
+    border: none;
+    padding: 0.2em;
+}
+.article-search-box input:focus {
+    outline-width: 0;
+}
+.hide{
+    display: none;
+}
