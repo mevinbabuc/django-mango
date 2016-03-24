@@ -55,3 +55,22 @@
             </div>
         </div>
 </script>
+
+<!-- Underscore template to show Top 10 search results -->
+<script type="text/template" class=ArticleTopSearchTemplate>
+    <h1>Top 10 Search results</h1>
+    <% _.each(articles, function(article, key, list) { %>
+        <div class="row-eq-height">
+            <div class="col-xs-1 col-sm-2 center-list-index">
+                <span class="list-counter-container"><%= key+1 %></span>
+            </div>
+            <div class="col-xs-11 col-sm-10">
+                <h3 class="article-title"><%= article.attributes.title %></h3>
+                <p class="article-text-content">
+                    <%= article.attributes.snippet %>
+                </p>
+                <p><a href="/#/<%= article.attributes.slug %>" role="button">Read more &raquo;</a></p>
+            </div>
+        </div>
+        <% }); %>
+</script>

@@ -58,6 +58,22 @@ var ArticleListView = Backbone.View.extend({
     }
 });
 
+// View to display the top 10 search results
+var ArticleSearchListView = Backbone.View.extend({
+    model: ArticleCollection,
+    el: $("#ArticleViewArea"),
+    initialize: function() {
+        this.render();
+    },
+    render: function() {
+        var template = _.template($("script.ArticleTopSearchTemplate").html());
+        this.$el.html(template({
+            articles: this.model
+        }));
+        return this
+    }
+});
+
 
 // Defining the router paths
 var AppRouter = Backbone.Router.extend({
@@ -139,17 +155,15 @@ $("#search-activate").on('click', function(){
 })
 
 
-var searchArticles = new ArticleCollection;
-searchArticles.url = 'articles/search/?query='+query
 $("#search-button").on('click', function(){
     query = $("#search-input").val()
-
-
+    var searchArticles = new ArticleCollection;
+    searchArticles.url = 'articles/search/?query='+query
 
     // Fetch the top 10 posts
     searchArticles.fetch({
         success: function(collection, response, options) {
-            var blog_view = new ArticleListView({
+            var blog_view = new ArticleSearchListView({
                 model: collection.models
             });
         },
