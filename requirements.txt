@@ -11,4 +11,4 @@ Pillow==3.1.1
 ptyprocess==0.5.1
 simplegeneric==0.8.1
 traitlets==4.1.0
-wheel==0.29.0
+wheel==0.46.2
